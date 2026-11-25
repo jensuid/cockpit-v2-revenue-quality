@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="violet">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cockpit · Revenue Quality — Sales &amp; Marketing</title>
+<meta name="description" content="Cockpit analitik sales & marketing: kualitas revenue, kebocoran journey, dan efisiensi belanja kanal.">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="mast">
+  <div class="brand">
+    <span class="mark" aria-hidden="true">◱</span>
+    <div class="titles">
+      <h1>Revenue&nbsp;Quality <span class="slash">/</span> Sales&nbsp;&&nbsp;Marketing</h1>
+      <p class="sub">Data Nov 2020 – Des 2023 · aktivitas lead berhenti 30 Des 2022</p>
+    </div>
+  </div>
+
+  <nav class="lens-tabs" role="tablist" aria-label="Lensa analitik">
+    <button role="tab" data-lens="value" aria-selected="true" aria-controls="lens-value">
+      <span class="num">01</span> Nilai
+    </button>
+    <button role="tab" data-lens="journey" aria-selected="false" aria-controls="lens-journey">
+      <span class="num">02</span> Journey
+    </button>
+    <button role="tab" data-lens="spend" aria-selected="false" aria-controls="lens-spend">
+      <span class="num">03</span> Belanja
+    </button>
+  </nav>
+
+  <div class="theme-switch" role="group" aria-label="Palet warna">
+    <button data-theme="paper" aria-pressed="false" title="Kertas + vermilion"><i></i>Paper</button>
+    <button data-theme="violet" aria-pressed="true" title="Porcelain + ungu / biru muda"><i></i>Violet</button>
+  </div>
+
+  <button class="rqi" id="rqi" aria-label="Revenue Quality Index, buka rincian">
+    <svg viewBox="0 0 56 56" class="rqi-gauge" aria-hidden="true">
+      <circle cx="28" cy="28" r="23" class="track"/>
+      <circle cx="28" cy="28" r="23" class="arc" id="rqiArc"/>
+    </svg>
+    <span class="rqi-text">
+      <span class="rqi-label">RQI</span>
+      <span class="rqi-value" id="rqiValue">—</span>
+    </span>
+  </button>
+</header>
+
+<div class="filterbar" role="group" aria-label="Filter data">
+  <span class="fb-k">Periode</span>
+  <div class="seg" id="fPeriod">
+    <button data-v="all" aria-pressed="true">Semua</button>
+    <button data-v="2021" aria-pressed="false">2021</button>
+    <button data-v="2022" aria-pressed="false">2022</button>
+    <button data-v="2023" aria-pressed="false">2023</button>
+  </div>
+  <span class="fb-k">Grain</span>
+  <div class="seg" id="fGrain">
+    <button data-v="month" aria-pressed="false">Bulan</button>
+    <button data-v="quarter" aria-pressed="true">Kuartal</button>
+  </div>
+  <label class="fb-sel">Kanal<select id="fChannel"></select></label>
+  <label class="fb-sel">Industri<select id="fIndustry"></select></label>
+  <label class="fb-sel">Tier<select id="fTier"></select></label>
+  <button class="fb-reset" id="fReset">Reset</button>
+  <span class="fb-note" id="fNote"></span>
+</div>
+
+<main id="stage">
+  <!-- ============================== NILAI ============================== -->
+  <section class="lens" id="lens-value" data-lens="value" role="tabpanel">
+    <article class="card hero" style="grid-area:h">
+      <header class="card-head">
+        <h2 id="gmvHead">GMV bulanan <span class="thin">· baru vs perpanjangan</span></h2>
+        <span class="badge solid">terekonsiliasi</span>
+      </header>
+      <div class="chart" id="chValue"></div>
+      <div class="legend">
+        <span><i class="sw sw-new"></i>New business</span>
+        <span><i class="sw sw-ren"></i>Renewal</span>
+        <span class="legend-note" id="legend2023">2023 = renewal-only (funnel berhenti Des 2022)</span>
+      </div>
+    </article>
+
+    <article class="card kpi" style="grid-area:k">
+      <div class="kpi-main">
+        <span class="kpi-label">GMV total</span>
+        <strong class="big" data-num="gmv">—</strong>
+        <span class="kpi-sub"><b data-num="growth22"></b> <span id="growthLbl">dari kontrak 2022</span></span>
+      </div>
+      <div class="split" id="kpiSplit"></div>
+      <dl class="kpi-pairs">
+        <div><dt>Kontrak</dt><dd data-num="contracts"></dd></div>
+        <div><dt>Akun</dt><dd data-num="accounts"></dd></div>
+        <div><dt>ARPA</dt><dd data-num="arpa"></dd></div>
+        <div><dt>Win rate</dt><dd data-num="win"></dd></div>
+      </dl>
+      <table class="mini" id="kpiYears"></table>
+      <p class="card-foot">Rata-rata deal <b data-num="avgDeal"></b> · seat terjual
+        <b data-num="seats"></b></p>
+    </article>
+
+    <article class="card findings" style="grid-area:f">
+      <header class="card-head"><h2>Temuan</h2><span class="badge neutral">dari data</span></header>
+      <div id="find-value" class="finding-list"></div>
+    </article>
+
+    <article class="card" style="grid-area:t">
+      <header class="card-head"><h2>Mix tier <span class="thin">· siapa membawa nilai</span></h2></header>
+      <div class="chart" id="chTier"></div>
+    </article>
+
+    <article class="card" style="grid-area:c">
+      <header class="card-head"><h2>Konsentrasi nilai</h2><span class="badge proxy">per akun</span></header>
+      <div class="chart" id="chLorenz"></div>
+      <p class="card-foot" id="concFoot"></p>
+    </article>
+
+    <article class="card" style="grid-area:d">
+      <header class="card-head"><h2>Ekonomi diskon</h2><span class="badge solid">D1/D2 flat</span></header>
+      <div class="chart" id="chDiscount"></div>
+      <p class="card-foot" id="discFoot"></p>
+    </article>
+
+    <article class="card small" style="grid-area:r">
+      <header class="card-head"><h2>Indeks kualitas</h2>
+        <span class="badge neutral" id="rqiBadge">skor</span>
+        <button class="info" data-prov="rqi" aria-label="rincian indeks">i</button></header>
+      <div class="rqi-parts" id="rqiParts"></div>
+      <p class="card-foot" id="rqiRead"></p>
+    </article>
+  </section>
+
+  <!-- ============================= JOURNEY ============================= -->
+  <section class="lens" id="lens-journey" data-lens="journey" role="tabpanel" hidden>
+    <article class="card hero" style="grid-area:h">
+      <header class="card-head">
+        <h2>Kebocoran funnel <span class="thin">· reach, konversi, waktu tunggu</span></h2>
+        <span class="badge solid">timestamp mentah</span>
+      </header>
+      <div class="chart" id="chFunnel"></div>
+      <div class="legend">
+        <span><i class="sw sw-reach"></i>Lead yang mencapai tahap</span>
+        <span><i class="sw sw-step"></i>Konversi dari tahap sebelumnya</span>
+        <span><i class="sw sw-dwell"></i>Median hari ke tahap berikutnya</span>
+      </div>
+    </article>
+
+    <article class="card kpi" style="grid-area:k">
+      <div class="kpi-main">
+        <span class="kpi-label">Win rate</span>
+        <strong class="big" data-num="win"></strong>
+        <span class="kpi-sub">median <b data-num="dtd"></b> hari ke deal</span>
+      </div>
+      <dl class="kpi-pairs">
+        <div><dt>Lead</dt><dd data-num="leads"></dd></div>
+        <div><dt>Menang</dt><dd data-num="won"></dd></div>
+        <div><dt>Open</dt><dd data-num="open"></dd></div>
+        <div><dt>Beku &gt;90h</dt><dd data-num="s90"></dd></div>
+      </dl>
+      <div class="fresh" id="freshBar"></div>
+      <p class="card-foot"><b data-num="staleShare"></b> dari pipeline "open" tidak bergerak &gt;30 hari.
+        Anggap arsip, bukan forecast.</p>
+    </article>
+
+    <article class="card findings" style="grid-area:f">
+      <header class="card-head"><h2>Temuan</h2><span class="badge neutral">dari data</span></header>
+      <div id="find-journey" class="finding-list"></div>
+    </article>
+
+    <article class="card" style="grid-area:co">
+      <header class="card-head"><h2>Kohort registrasi <span class="thin">· Nov 20 – Des 22</span></h2></header>
+      <div class="chart" id="chCohort"></div>
+      <div class="scale"><span>rendah</span><i></i><span>tinggi</span><em>konversi per kohort registrasi</em></div>
+    </article>
+
+    <article class="card" style="grid-area:lo">
+      <header class="card-head"><h2>Alasan gugur</h2><span class="badge proxy">nilai = proxy</span></header>
+      <div class="chart" id="chLoss"></div>
+    </article>
+
+    <article class="card" style="grid-area:ft">
+      <header class="card-head"><h2>Halaman sentuh pertama</h2><span class="badge proxy">CI 95%</span></header>
+      <div class="chart" id="chFirstTouch"></div>
+      <p class="card-foot">Garis tipis = interval Wilson. Selisih di dalam interval bukan sinyal.</p>
+    </article>
+  </section>
+
+  <!-- ============================== BELANJA ============================= -->
+  <section class="lens" id="lens-spend" data-lens="spend" role="tabpanel" hidden>
+    <article class="card hero" style="grid-area:h">
+      <header class="card-head">
+        <h2>Peta efisiensi kanal <span class="thin">· GMV per rupiah belanja</span></h2>
+        <span class="badge proxy">atribusi waktu deal</span>
+      </header>
+      <div class="chart" id="chBubble"></div>
+      <div class="legend"><span>X = total belanja · Y = GMV ÷ belanja · ukuran = GMV</span></div>
+    </article>
+
+    <article class="card scenario" style="grid-area:s">
+      <header class="card-head"><h2>Simulasi realokasi</h2>
+        <button class="info" data-prov="scenario" aria-label="asumsi simulasi">i</button></header>
+      <p class="scenario-line">Geser <b id="scFrom">Organic Social</b> → <b id="scTo">CPC</b></p>
+      <input type="range" id="scRange" min="0" max="25" step="5" value="15"
+             aria-label="Persentase budget yang dialihkan">
+      <div class="scenario-out">
+        <div><span class="sc-label">Budget dialihkan</span><strong data-num="scMoved"></strong></div>
+        <div><span class="sc-label">Δ GMV historis</span><strong class="pos" data-num="scGmv"></strong></div>
+        <div><span class="sc-label">Δ deal</span><strong data-num="scWon"></strong></div>
+      </div>
+      <div class="chart" id="chScen"></div>
+      <p class="card-foot">Proyeksi linear dari rata-rata historis — bukan janji. Saturasi &amp; musim tidak dimodelkan.</p>
+    </article>
+
+    <article class="card findings" style="grid-area:f">
+      <header class="card-head"><h2>Temuan</h2><span class="badge neutral">dari data</span></header>
+      <div id="find-spend" class="finding-list"></div>
+    </article>
+
+    <article class="card" style="grid-area:e">
+      <header class="card-head"><h2>Biaya akuisisi</h2><span class="badge proxy">CAC proxy</span></header>
+      <div class="chart" id="chCac"></div>
+    </article>
+
+    <article class="card" style="grid-area:m">
+      <header class="card-head"><h2>Belanja vs output</h2></header>
+      <div class="chart" id="chSpendMonth"></div>
+      <div class="legend tight"><span><i class="sw sw-spend"></i>Belanja / bulan</span><span><i class="sw sw-won"></i>Biaya per deal (rolling 3 bln)</span></div>
+    </article>
+
+    <article class="card small" style="grid-area:b">
+      <header class="card-head"><h2>Bacaan</h2><span class="badge solid">blended</span></header>
+      <dl class="ledger" id="blendedLedger"></dl>
+    </article>
+  </section>
+</main>
+
+<footer class="statusbar">
+  <span class="dot" aria-hidden="true"></span>
+  <span id="statusFacts">9 CSV + 2 XLSX · 3.397 lead · 1.754 kontrak · 16.328 event</span>
+  <span class="grow"></span>
+  <span class="keys"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> lensa · <kbd>←</kbd><kbd>→</kbd> geser · <kbd>Esc</kbd> tutup</span>
+  <span class="src">filter = jumlah sel pra-agregat · definisi tetap di metrics layer</span>
+</footer>
+
+<aside class="drawer" id="drawer" hidden aria-live="polite">
+  <header><h3 id="drawerTitle">Provenance</h3>
+    <button id="drawerClose" aria-label="Tutup">×</button></header>
+  <div id="drawerBody"></div>
+</aside>
+<div class="tip" id="tip" hidden></div>
+
+<script src="data.js"></script>
+<script src="cube.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

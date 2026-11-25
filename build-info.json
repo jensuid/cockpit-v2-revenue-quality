@@ -1,0 +1,52 @@
+{
+  "bundle": "F6-v2 cockpit (revenue quality)",
+  "entrypoints": {
+    "multi_file": "index.html",
+    "single_file": "cockpit-v2.html"
+  },
+  "files": {
+    "app.css": {
+      "bytes": 25737,
+      "sha256": "0bd0f99c5c78203d42a2dfaf4d6698c0fa4370a698232e2afabc91988b51aee4"
+    },
+    "app.js": {
+      "bytes": 49158,
+      "sha256": "659c1d5b24fb107717634d245e912cdef944a12679711344c2336f3b460ecb1c"
+    },
+    "cockpit-v2.html": {
+      "bytes": 277481,
+      "sha256": "9781ce5579d82bce5477500a0a790d1b75811dfe22146829995285acab033e80"
+    },
+    "cube.js": {
+      "bytes": 9324,
+      "sha256": "a269cccde1a3fbeff45b05429494aeec780d92e256e5ee0887042cd23d987e9d"
+    },
+    "data.js": {
+      "bytes": 181425,
+      "sha256": "a592ac054a8d7627124b89dbb28bca90ce80072f7cb08cb492703dbf7982f17c"
+    },
+    "index.html": {
+      "bytes": 11893,
+      "sha256": "c3b0396091dc92267abae123d70ff5da8270c5fa0cf69dd5bf1d99ef3accb0f2"
+    }
+  },
+  "opens_from_file_url": true,
+  "rewrites": [
+    {
+      "from": "href=\"static/app.css\"",
+      "to": "href=\"app.css\""
+    },
+    {
+      "from": "src=\"data.js\"",
+      "to": "src=\"data.js\""
+    },
+    {
+      "from": "src=\"static/cube.js\"",
+      "to": "src=\"cube.js\""
+    },
+    {
+      "from": "src=\"static/app.js\"",
+      "to": "src=\"app.js\""
+    }
+  ]
+}
